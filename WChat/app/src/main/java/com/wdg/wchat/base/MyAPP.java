@@ -18,6 +18,7 @@ public class MyAPP extends Application {
     private static MyAPP sApp;
 
 
+
     @Override
     public void onCreate() {
         super.onCreate();

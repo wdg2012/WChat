@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.wdg.wchat.ui.activity.SplashActivity">
+ <ImageView
+     android:layout_width="match_parent"
+     android:id="@+id/iv_splash"
+     android:src="@drawable/splash"
+     android:scaleType="centerCrop"
+     android:layout_height="match_parent"/>
+<LinearLayout
+    android:visibility="invisible"
+    android:id="@+id/layout_visible"
+    android:layout_marginBottom="20dp"
+    android:layout_alignParentBottom="true"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+ <Button
+     android:layout_marginLeft="30dp"
+     android:layout_width="140dp"
+     android:text="登录"
+     android:background="@color/main_green"
+     android:textSize="16sp"
+     android:id="@+id/btn_login"
+     android:textColor="@color/color_white"
+     android:layout_height="40dp"/>
+ <View
+     android:layout_width="0dp"
+     android:layout_weight="1"
+     android:layout_height="0dp"/>
+ <Button
+     android:layout_width="140dp"
+     android:text="注册"
+     android:background="@color/color_white"
+     android:textSize="16sp"
+     android:layout_marginRight="30dp"
+     android:textColor="#333333"
+     android:id="@+id/btn_register"
+     android:layout_height="40dp"/>
+
+</LinearLayout>
+
+</RelativeLayout>

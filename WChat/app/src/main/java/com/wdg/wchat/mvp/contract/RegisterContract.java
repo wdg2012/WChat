@@ -10,7 +10,7 @@ public interface RegisterContract {
     interface Model {
     }
 
-    interface View {
+    interface View  extends BaseContract.View{
         String getPhone();
         String getPassword();
         String getNick();

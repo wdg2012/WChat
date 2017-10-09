@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.wdg.wchat.base.MyAPP;
 import com.wdg.wchat.bean.bean.NetSubscriber;
 import com.wdg.wchat.bean.dto.LoginDto;
-import com.wdg.wchat.mvp.contract.LoginContract;
+import com.wdg.wchat.mvp.contract.AlreadyLoginContract;
 import com.wdg.wchat.mvp.model.LoginModel;
 import com.wdg.wchat.utils.SharedPreferencesUtils;
 
@@ -24,9 +24,9 @@ import rx.schedulers.Schedulers;
  * Created by ${wdgan} on 2017/9/28 0028.
  * 邮箱18149542718@163
  */
-public class LoginPresenter implements LoginContract.Presenter {
-    private LoginContract.View mView;
-    private LoginContract.Model mModel;
+public class AlreadyLoginPresenter implements AlreadyLoginContract.Presenter {
+    private AlreadyLoginContract.View mView;
+    private AlreadyLoginContract.Model mModel;
     private Context mContext;
     private boolean isSmsLogin;
     private CountDownTimer mCountDownTime;
@@ -36,7 +36,7 @@ public class LoginPresenter implements LoginContract.Presenter {
     private TextView mEtPassword;
 
 
-    public LoginPresenter(final LoginContract.View view) {
+    public AlreadyLoginPresenter(final AlreadyLoginContract.View view) {
         mView = view;
         mModel = new LoginModel();
         mContext = MyAPP.getApp();
@@ -183,6 +183,7 @@ public class LoginPresenter implements LoginContract.Presenter {
         }
         final ProgressDialog pd = mView.showProgress();
         mModel.smsOfLogin(phone,verCode).subscribeOn(Schedulers.io())
+                .compose(mView.<LoginDto>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new NetSubscriber<LoginDto>() {
                     @Override

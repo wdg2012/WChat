@@ -15,8 +15,8 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import com.wdg.wchat.R;
-import com.wdg.wchat.mvp.contract.LoginContract;
-import com.wdg.wchat.mvp.presenter.LoginPresenter;
+import com.wdg.wchat.mvp.contract.AlreadyLoginContract;
+import com.wdg.wchat.mvp.presenter.AlreadyLoginPresenter;
 import com.wdg.wchat.utils.ProgressDialogUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,7 +28,7 @@ import butterknife.OnClick;
  * 邮箱18149542718@163
  */
 
-public class LoginActivity extends BaseActivity implements LoginContract.View {
+public class AlreadyLoginActivity extends BaseActivity implements AlreadyLoginContract.View {
     @BindView(R.id.iv_more)
     ImageView mIvMore;
     @BindView(R.id.iv_head_image)
@@ -43,14 +43,14 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     TextView mTvIssmsLogin;
     @BindView(R.id.tv_get_ver_code)
     TextView mTvGetVerCode;
-    private LoginContract.Presenter mLoginPresenter;
+    private AlreadyLoginContract.Presenter mLoginPresenter;
     private PopupWindow mPopupWindow;
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_already_login);
         ButterKnife.bind(this);
-        mLoginPresenter = new LoginPresenter(this);
+        mLoginPresenter = new AlreadyLoginPresenter(this);
         mLoginPresenter.autoLogin();
     }
 
@@ -209,14 +209,14 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             Intent intent = null;
             switch (view.getId()) {
                 case R.id.tvSwtAccount:
-//                    intent = new Intent(LoginActivity.this, PhoneLoginFActivity.class);
+//                    intent = new Intent(AlreadyLoginActivity.this, PhoneLoginFActivity.class);
                     break;
                 case R.id.tvFindPwd:
                     break;
                 case R.id.tvSeyCenter:
                     break;
                 case R.id.tvRegister:
-                    intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                    intent = new Intent(AlreadyLoginActivity.this, RegisterActivity.class);
                     break;
                 case R.id.layout_root:
                     break;

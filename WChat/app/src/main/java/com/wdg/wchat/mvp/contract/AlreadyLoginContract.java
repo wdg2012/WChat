@@ -11,7 +11,7 @@ import rx.Observable;
  * Created by ${wdgan} on 2017/9/28 0028.
  * 邮箱18149542718@163
  */
-public interface LoginContract extends BaseContract{
+public interface AlreadyLoginContract extends BaseContract{
     interface Model extends BaseContract.Model{
       Observable<LoginDto> passwordOfLogin( String phone,String password);
         Observable<LoginDto> smsOfLogin(String phone,String verCode);

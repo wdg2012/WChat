@@ -17,7 +17,7 @@ public interface VerCodeContract {
         Observable<RegisterDto> register(RegisterInfoBean bean);
     }
 
-    interface View {
+    interface View extends BaseContract.View{
         String getVerCode();
         ProgressDialog showProgressDialog();
     }

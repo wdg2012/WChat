@@ -44,7 +44,7 @@ public interface UserService {
      * @param password 密码
      * @return
      */
-    @POST("user/login")
+    @POST("user/passwordLogin")
     @FormUrlEncoded
     Observable<LoginDto> passwordLogin(@Field("phone") String username,
                                        @Field("password") String password);

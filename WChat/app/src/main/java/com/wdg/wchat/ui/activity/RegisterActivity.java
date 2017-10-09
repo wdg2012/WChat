@@ -128,4 +128,9 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         intent.putExtra("bean", bean);
         startActivity(intent);
     }
+
+    @OnClick(R.id.iv_back)
+    public void onClick() {
+        finish();
+    }
 }

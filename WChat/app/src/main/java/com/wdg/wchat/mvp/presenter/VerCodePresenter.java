@@ -42,6 +42,7 @@ public class VerCodePresenter implements VerCodeContract.Presenter {
             return;
         }
         mModel.register(bean).subscribeOn(Schedulers.io())
+                .compose(mView.<RegisterDto>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<RegisterDto>() {
             @Override
