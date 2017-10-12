@@ -84,7 +84,7 @@
         android:padding="10dp"
         android:gravity="center"
         android:textSize="16sp"
-        android:text="接收短信大约需要xx秒钟"/>
+        android:text="接收短信大约需要120秒钟"/>
 
     <Button
         android:id="@+id/btnRegister"

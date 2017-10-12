@@ -10,6 +10,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters  "armeabi"
+        }
     }
     buildTypes {
         release {
@@ -18,6 +21,7 @@ android {
         }
     }
 }
+
 repositories {
     flatDir {
         dirs 'libs'
@@ -32,15 +36,7 @@ dependencies {
     compile name: 'SMSSDK-3.0.0', ext: 'aar'
     compile name: 'SMSSDKGUI-3.0.0', ext: 'aar'
     compile files('libs/MobTools-2017.0607.1736.jar')
-    //    compile 'com.squareup.retrofit2:retrofit:2.0.2'
-//    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-//    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-//    compile 'io.reactivex.rxjava2:rxjava:2.0.5'
-    //
-//    // RxBinding
     compile 'com.jakewharton.rxbinding:rxbinding:0.3.0'
-//    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.3.0'
-//    compile 'com.jakewharton.rxbinding:rxbinding-design:0.3.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.jakewharton:butterknife:8.8.1'
@@ -50,7 +46,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.lzy.widget:imagepicker:0.6.1'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.jaywei:compresstool:1.0.2'
     compile 'com.orhanobut:hawk:2.0.0-Alpha'
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'
@@ -60,6 +55,6 @@ dependencies {
     compile 'com.trello:rxlifecycle:0.3.0'
     compile 'com.trello:rxlifecycle-components:0.3.0'
     compile 'com.android.support:design:25.3.1'
-    testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'top.zibin:Luban:1.1.3'
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.wdg.wchat.R;
 import com.wdg.wchat.bean.event.FinshSplashEvent;
+import com.wdg.wchat.bean.event.RegisterSuccessEvent;
 import com.wdg.wchat.mvp.contract.SplashContract;
 import com.wdg.wchat.mvp.presenter.SplashPresenter;
 
@@ -97,8 +98,19 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     }
 
     @Subscribe
-    public void finshActivity(FinshSplashEvent event) {
+    public void loginSuccess(FinshSplashEvent event) {
         if (event.getResult()) {
+            finish();
+        }
+    }
+
+    /**
+     * 注册成功
+     * @param event
+     */
+    @Subscribe
+    public void registerSuccess(RegisterSuccessEvent event){
+        if (event.getResult()){
             finish();
         }
     }

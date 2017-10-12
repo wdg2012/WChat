@@ -1,6 +1,6 @@
 package com.wdg.wchat.mvp.model;
 
-import com.wdg.wchat.apiService.UserService;
+import com.wdg.wchat.apiService.UserApiService;
 import com.wdg.wchat.bean.dto.LoginDto;
 import com.wdg.wchat.mvp.contract.FirstLoginContract;
 import com.wdg.wchat.utils.RetrofitUtils;
@@ -20,7 +20,7 @@ public class FirstLoginModel implements FirstLoginContract.Model {
      */
     @Override
     public Observable<LoginDto> passwordOfLogin( String phone,String password) {
-        UserService userService = RetrofitUtils.createService(UserService.class);
+        UserApiService userService = RetrofitUtils.createService(UserApiService.class);
         return userService.passwordLogin(phone,password);
     }
 
@@ -32,7 +32,7 @@ public class FirstLoginModel implements FirstLoginContract.Model {
      */
     @Override
     public Observable<LoginDto> smsOfLogin( String phone,String verCode) {
-        UserService userService = RetrofitUtils.createService(UserService.class);
+        UserApiService userService = RetrofitUtils.createService(UserApiService.class);
         return userService.smsLogin(phone,verCode);
     }
 }

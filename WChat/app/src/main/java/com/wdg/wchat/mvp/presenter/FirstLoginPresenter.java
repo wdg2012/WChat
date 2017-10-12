@@ -136,7 +136,7 @@ public class FirstLoginPresenter implements FirstLoginContract.Presenter {
 
         String phone = mTvAccount.getText().toString();
         Observable.interval(1, TimeUnit.SECONDS)
-                .take(120).compose(mView.<Long>bindToLifecycle())
+                .take(120)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Long>() {
@@ -156,7 +156,7 @@ public class FirstLoginPresenter implements FirstLoginContract.Presenter {
                     }
                 });
         isNoGetSms = true;
-//        cn.smssdk.SMSSDK.getVerificationCode("86", phone);
+        cn.smssdk.SMSSDK.getVerificationCode("86", phone);
     }
 
     /**

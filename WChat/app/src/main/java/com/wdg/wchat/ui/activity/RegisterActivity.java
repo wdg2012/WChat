@@ -2,6 +2,7 @@ package com.wdg.wchat.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,8 +17,12 @@ import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.wdg.wchat.R;
 import com.wdg.wchat.bean.bean.RegisterInfoBean;
+import com.wdg.wchat.bean.event.RegisterSuccessEvent;
 import com.wdg.wchat.mvp.contract.RegisterContract;
 import com.wdg.wchat.mvp.presenter.RegisterPresenter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
@@ -57,6 +62,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         mPresenter = new RegisterPresenter(this);
     }
 
@@ -73,6 +79,17 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+    @Subscribe
+    public void registerSuccess(RegisterSuccessEvent event){
+        if (event.getResult()){
+            finish();
+        }
+    }
     /**
      * 设置头像
      *
@@ -124,6 +141,38 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public void toVerCodeRegister(RegisterInfoBean bean) {
+//        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/nm.jpg";
+//        Observable.just(path).subscribeOn(Schedulers.io())
+//                .map(new Func1<String, File>() {
+//                    @Override
+//                    public File call(final String s) {
+//                        try {
+//                            return Luban.with(RegisterActivity.this).load(s).get().get(0);
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        return null;
+//                    }
+//
+//                }).flatMap(new Func1<File, Observable<UploadImageDto>>() {
+//            @Override
+//            public Observable<UploadImageDto> call(final File file) {
+//                CommonApiService service = RetrofitUtils.createService(CommonApiService.class);
+//                MultipartBody.Part headPhoto = RetrofitUtils.makeMulPart(file,"smfile");
+//                return service.uploadImage("https://sm.ms/api/upload", headPhoto);
+//            }
+//        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new NetSubscriber<UploadImageDto>() {
+//            @Override
+//            public void onNext(final UploadImageDto dto) {
+//                super.onNext(dto);
+//            }
+//
+//            @Override
+//            public void onError(final Throwable e) {
+//                super.onError(e);
+//            }
+//        });
         Intent intent = new Intent(this, VerCodeActivity.class);
         intent.putExtra("bean", bean);
         startActivity(intent);

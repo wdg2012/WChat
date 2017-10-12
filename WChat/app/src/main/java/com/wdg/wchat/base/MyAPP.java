@@ -16,8 +16,7 @@ import com.wdg.wchat.utils.GlideImageLoader;
 
 public class MyAPP extends Application {
     private static MyAPP sApp;
-
-
+    public static String uploadImageUrl = "https://sm.ms/api/upload";
 
     @Override
     public void onCreate() {

@@ -1,6 +1,7 @@
 package com.wdg.wchat.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -11,8 +12,12 @@ import android.widget.TextView;
 
 import com.wdg.wchat.R;
 import com.wdg.wchat.bean.bean.RegisterInfoBean;
+import com.wdg.wchat.bean.dto.RegisterDto;
+import com.wdg.wchat.bean.event.RegisterSuccessEvent;
 import com.wdg.wchat.mvp.contract.VerCodeContract;
 import com.wdg.wchat.mvp.presenter.VerCodePresenter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 
@@ -46,12 +51,11 @@ public class VerCodeActivity extends BaseActivity implements VerCodeContract.Vie
         ButterKnife.bind(this);
         mInfoBean = getIntent().getParcelableExtra("bean");
         mTvPhoneNumber.setText(mInfoBean.getCountry()+" "+mInfoBean.getPhone());
-        initCountDownTime(120*1000,1000);
-        //发送验证码
-        cn.smssdk.SMSSDK.getVerificationCode("86", mInfoBean.getPhone());
         File file = new File(mInfoBean.getHeadPhoto());
         mInfoBean.setFile(file);
         mPresenter = new VerCodePresenter(this);
+        //获取验证码
+        mPresenter.getSms("86",mInfoBean.getPhone());
     }
 
     /**
@@ -80,12 +84,14 @@ public class VerCodeActivity extends BaseActivity implements VerCodeContract.Vie
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvVerCodeInfo:
-                if (isRunning){
-                    return;
-                }
-                cn.smssdk.SMSSDK.getVerificationCode("86", mInfoBean.getPhone());
-                isRunning = true;
-                mCountDownTimer.start();
+                String phone = mInfoBean.getPhone();
+                mPresenter.getSms("86",phone);
+//                if (isRunning){
+//                    return;
+//                }
+//                cn.smssdk.SMSSDK.getVerificationCode("86", mInfoBean.getPhone());
+//                isRunning = true;
+//                mCountDownTimer.start();
                 break;
             case R.id.btnRegister:
                  mPresenter.register(mInfoBean);
@@ -94,13 +100,27 @@ public class VerCodeActivity extends BaseActivity implements VerCodeContract.Vie
     }
 
     @Override
-    public String getVerCode() {
-        return mEtVerCode.getText().toString();
+    public EditText getVerCodeView() {
+        return mEtVerCode;
+    }
+
+    @Override
+    public TextView getCountDownView() {
+        return mTvVerCodeInfo;
     }
 
     @Override
     public ProgressDialog showProgressDialog() {
         return showProgress();
+    }
+
+    /**
+     * 注册成功
+     */
+    @Override
+    public void registerSuccess() {
+        EventBus.getDefault().post(new RegisterSuccessEvent("register sucess",true));
+        startActivity(new Intent(this,FirstLoginActivity.class));
     }
 
 }

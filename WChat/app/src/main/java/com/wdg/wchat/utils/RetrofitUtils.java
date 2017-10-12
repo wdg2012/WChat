@@ -1,12 +1,18 @@
 package com.wdg.wchat.utils;
 
+import android.text.TextUtils;
+
 import com.google.gson.GsonBuilder;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 
+import okhttp3.RequestBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -66,5 +72,34 @@ public class RetrofitUtils {
                 .build();
         lock.unlock();
         return OkHttpClient;
+    }
+
+    /**
+     * 创建MultipartBody.Part
+     * @param path 文件路径
+     * @param key 上传的参数
+     * @return
+     */
+    public static MultipartBody.Part makeMulPart(String path,String key){
+          File file = new File(path);
+        return makeMulPart(file,key);
+    }
+
+    /**
+     * 创建MultipartBody.Part
+     * @param file 文件
+     * @param key 上传的参数
+     * @return
+     */
+    public static MultipartBody.Part makeMulPart(File file,String key){
+        if (TextUtils.isEmpty(key)|| file==null){
+            throw new NullPointerException("file or key is null");
+        }
+        MultipartBody.Part result;
+        RequestBody photoRequestBody = RequestBody.create(
+                MediaType.parse("application/octet-stream"), file);
+        result = MultipartBody.Part.createFormData(
+                key, file.getName(), photoRequestBody);
+        return result;
     }
 }
