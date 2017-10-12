@@ -16,6 +16,25 @@ public class RegisterInfoBean implements Parcelable {
     private String mPassword;
     private String mCountry;
     private String mNick;
+    private String head_path;
+    private String delete_path;
+
+    public String getHead_path() {
+        return head_path;
+    }
+
+    public void setHead_path(final String head_path) {
+        this.head_path = head_path;
+    }
+
+    public String getDelete_path() {
+        return delete_path;
+    }
+
+    public void setDelete_path(final String delete_path) {
+        this.delete_path = delete_path;
+    }
+
     private String verCode;
     private File mFile;
 

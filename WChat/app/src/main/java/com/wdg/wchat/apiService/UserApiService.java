@@ -26,7 +26,8 @@ public interface UserApiService {
      * @param phone 手机号
      * @param password 密码
      * @param country 国家
-     * @param file 头像
+     * @param head_path
+     * @param delete_path
      * @param ver_code 验证码
      * @param user_nick 昵称
      * @return
@@ -36,7 +37,8 @@ public interface UserApiService {
     Observable<RegisterDto> register(@Part("phone") RequestBody phone,
                                      @Part("password") RequestBody password,
                                      @Part("country")RequestBody country,
-                                     @Part MultipartBody.Part  file,
+                                     @Part ("head_path")RequestBody head_path,
+                                     @Part("delete_path") RequestBody delete_path,
                                      @Part("ver_code")RequestBody ver_code,
                                      @Part("user_nick")RequestBody user_nick);
     /**

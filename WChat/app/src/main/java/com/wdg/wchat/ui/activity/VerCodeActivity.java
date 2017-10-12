@@ -3,7 +3,6 @@ package com.wdg.wchat.ui.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.wdg.wchat.R;
 import com.wdg.wchat.bean.bean.RegisterInfoBean;
-import com.wdg.wchat.bean.dto.RegisterDto;
 import com.wdg.wchat.bean.event.RegisterSuccessEvent;
 import com.wdg.wchat.mvp.contract.VerCodeContract;
 import com.wdg.wchat.mvp.presenter.VerCodePresenter;
@@ -40,8 +38,6 @@ public class VerCodeActivity extends BaseActivity implements VerCodeContract.Vie
     @BindView(R.id.btnRegister)
     Button mBtnRegister;
     private RegisterInfoBean mInfoBean;
-    private CountDownTimer mCountDownTimer;
-    private boolean isRunning;
     private VerCodePresenter mPresenter;
 
     @Override
@@ -58,40 +54,12 @@ public class VerCodeActivity extends BaseActivity implements VerCodeContract.Vie
         mPresenter.getSms("86",mInfoBean.getPhone());
     }
 
-    /**
-     *
-     * @param millisInFuture 倒计时时间
-     * @param countDownInterval  时间间隔
-     */
-    private void initCountDownTime(long millisInFuture,long countDownInterval) {
-        isRunning = true;
-        mCountDownTimer = new CountDownTimer(millisInFuture,countDownInterval) {
-            @Override
-            public void onTick(final long millisUntilFinished) {
-                mTvVerCodeInfo.setText("接受短信大约需要"+millisUntilFinished/1000+"秒钟");
-            }
-
-            @Override
-            public void onFinish() {
-                mTvVerCodeInfo.setText("获取验证码");
-                isRunning = false;
-            }
-        };
-        mCountDownTimer.start();
-    }
-
     @OnClick({R.id.tvVerCodeInfo, R.id.btnRegister})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvVerCodeInfo:
                 String phone = mInfoBean.getPhone();
                 mPresenter.getSms("86",phone);
-//                if (isRunning){
-//                    return;
-//                }
-//                cn.smssdk.SMSSDK.getVerificationCode("86", mInfoBean.getPhone());
-//                isRunning = true;
-//                mCountDownTimer.start();
                 break;
             case R.id.btnRegister:
                  mPresenter.register(mInfoBean);

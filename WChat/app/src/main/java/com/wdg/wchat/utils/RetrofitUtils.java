@@ -26,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitUtils {
     private static final String API_SERVER = "http://47.93.21.48:8080/ssm_war/"; // 服务器的地址
+    private static final String API_TEST = "http://192.168.0.105:8080/";
     private  static Retrofit sRetrofit;
     private static OkHttpClient mOkHttpClient;
 
@@ -39,7 +40,7 @@ public class RetrofitUtils {
                 mOkHttpClient =  createOkHttp();
             }
             sRetrofit = new Retrofit.Builder()
-                    .baseUrl(API_SERVER).addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .baseUrl(API_TEST).addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
                     .client(mOkHttpClient)
                     .build();

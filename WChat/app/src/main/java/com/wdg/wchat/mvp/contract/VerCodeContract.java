@@ -34,6 +34,5 @@ public interface VerCodeContract {
     interface Presenter extends BaseContract.Presenter{
         void register(RegisterInfoBean bean);
         void getSms(String zone,String phone);
-        void countDown(int interval,int time);
     }
 }

@@ -5,19 +5,28 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wdg.wchat.apiService.CommonApiService;
 import com.wdg.wchat.base.MyAPP;
+import com.wdg.wchat.bean.bean.NetSubscriber;
 import com.wdg.wchat.bean.dto.RegisterDto;
 import com.wdg.wchat.bean.bean.RegisterInfoBean;
+import com.wdg.wchat.bean.dto.UploadImageDto;
 import com.wdg.wchat.mvp.contract.VerCodeContract;
 import com.wdg.wchat.mvp.model.VerCodeModel;
+import com.wdg.wchat.utils.RetrofitUtils;
 import com.wdg.wchat.utils.SharedPreferencesUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MultipartBody;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import top.zibin.luban.Luban;
 
 
 /**
@@ -43,7 +52,7 @@ public class VerCodePresenter implements VerCodeContract.Presenter {
     /**
      * 注册
      *
-     * @param bean
+     * @param bean 用户的注册信息
      */
     @Override
     public void register(final RegisterInfoBean bean) {
@@ -53,41 +62,59 @@ public class VerCodePresenter implements VerCodeContract.Presenter {
             Toast.makeText(mContext, "验证码不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
+        String path = bean.getHeadPhoto();
+        Observable.just(path).subscribeOn(Schedulers.io()).map(new Func1<String, File>() {
+            @Override
+            public File call(final String s) {
+                try {
+                    return Luban.with(mContext).load(s).get().get(0);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
 
-        mModel.register(bean).subscribeOn(Schedulers.io())
-                .compose(mView.<RegisterDto>bindToLifecycle())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<RegisterDto>() {
+        }).flatMap(new Func1<File, Observable<UploadImageDto>>() {
+
+            @Override
+            public Observable<UploadImageDto> call(final File file) {
+                CommonApiService service = RetrofitUtils.createService(CommonApiService.class);
+                MultipartBody.Part headPhoto = RetrofitUtils.makeMulPart(file, "smfile");
+                return service.uploadImage("https://sm.ms/api/upload", headPhoto);
+            }
+        }).observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<UploadImageDto, Observable<RegisterDto>>() {
                     @Override
-                    public void onCompleted() {
-
+                    public Observable<RegisterDto> call(final UploadImageDto dto) {
+                        bean.setDelete_path(dto.getData().getDelete());
+                        bean.setHeadPhoto(dto.getData().getUrl());
+                        return mModel.register(bean);
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new NetSubscriber<RegisterDto>() {
+                    @Override
+                    public void onNext(final RegisterDto dto) {
+                        super.onNext(dto);
                     }
 
                     @Override
                     public void onError(final Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(final RegisterDto dto) {
-                        if (dto != null) {
-                            if ("101".equals(dto)) {
-                                mView.registerSuccess();
-                            }
-                            Toast.makeText(mContext, dto.getError(), Toast.LENGTH_SHORT).show();
-                        }
+                        super.onError(e);
                     }
                 });
+
     }
 
     /**
      * 获取验证码
-     * @param zone 区号
+     *
+     * @param zone  区号
      * @param phone 电话号码
      */
     @Override
     public void getSms(String zone, final String phone) {
-        if (isNoGetSms){
+        if (isNoGetSms) {
             return;
         }
         Observable.interval(1, TimeUnit.SECONDS)
@@ -107,16 +134,11 @@ public class VerCodePresenter implements VerCodeContract.Presenter {
 
                     @Override
                     public void onNext(Long aLong) {
-                        mTvVerCodeInfo.setText("接受短信大约需要"+(120-aLong)+"秒钟");
+                        mTvVerCodeInfo.setText("接受短信大约需要" + (120 - aLong) + "秒钟");
                     }
                 });
         isNoGetSms = true;
 //        cn.smssdk.SMSSDK.getVerificationCode(zone, phone);
-    }
-
-    @Override
-    public void countDown(final int interval, final int time) {
-
     }
 
     /**

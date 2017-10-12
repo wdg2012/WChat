@@ -28,10 +28,12 @@ public class VerCodeModel implements VerCodeContract.Model {
     @Override
     public Observable<RegisterDto> register(final RegisterInfoBean bean) {
         UserApiService userService = RetrofitUtils.createService(UserApiService.class);
-        RequestBody photoRequestBody = RequestBody.create(MediaType.parse("application/octet-stream"), bean.getFile());
-        MultipartBody.Part headPhoto = MultipartBody.Part.createFormData("headPhoto",bean.getFile().getName(), photoRequestBody);
-        return userService.register(RequestBody.create(null, bean.getPhone()), RequestBody.create(null, bean.getPassword())
-                , RequestBody.create(null, bean.getCountry()),headPhoto, RequestBody.create(null, bean.getVerCode()),
+        return userService.register(RequestBody.create(null, bean.getPhone()),
+                RequestBody.create(null, bean.getPassword()),
+                RequestBody.create(null, bean.getCountry()),
+                RequestBody.create(null,  bean.getHead_path()),
+                RequestBody.create(null,  bean.getDelete_path()),
+                RequestBody.create(null, bean.getVerCode()),
                 RequestBody.create(null, bean.getNick()));
     }
 

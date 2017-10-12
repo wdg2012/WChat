@@ -141,38 +141,6 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public void toVerCodeRegister(RegisterInfoBean bean) {
-//        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/nm.jpg";
-//        Observable.just(path).subscribeOn(Schedulers.io())
-//                .map(new Func1<String, File>() {
-//                    @Override
-//                    public File call(final String s) {
-//                        try {
-//                            return Luban.with(RegisterActivity.this).load(s).get().get(0);
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        return null;
-//                    }
-//
-//                }).flatMap(new Func1<File, Observable<UploadImageDto>>() {
-//            @Override
-//            public Observable<UploadImageDto> call(final File file) {
-//                CommonApiService service = RetrofitUtils.createService(CommonApiService.class);
-//                MultipartBody.Part headPhoto = RetrofitUtils.makeMulPart(file,"smfile");
-//                return service.uploadImage("https://sm.ms/api/upload", headPhoto);
-//            }
-//        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new NetSubscriber<UploadImageDto>() {
-//            @Override
-//            public void onNext(final UploadImageDto dto) {
-//                super.onNext(dto);
-//            }
-//
-//            @Override
-//            public void onError(final Throwable e) {
-//                super.onError(e);
-//            }
-//        });
         Intent intent = new Intent(this, VerCodeActivity.class);
         intent.putExtra("bean", bean);
         startActivity(intent);
