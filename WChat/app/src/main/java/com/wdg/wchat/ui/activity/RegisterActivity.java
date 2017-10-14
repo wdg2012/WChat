@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lzy.imagepicker.ImagePicker;
@@ -37,6 +38,7 @@ import butterknife.OnClick;
  */
 public class RegisterActivity extends BaseActivity implements RegisterContract.View {
     private static final int IMAGE_PICKER = 0x113;
+    private static final int COUNTRYCODE_BACK = 0x114;
     @BindView(R.id.iv_back)
     ImageView mIvBack;
     @BindView(R.id.layout_back)
@@ -45,8 +47,8 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     EditText mEtNickName;
     @BindView(R.id.ivPhoto)
     ImageView mIvPhoto;
-    @BindView(R.id.etCountry)
-    EditText mEtCountry;
+    @BindView(R.id.tvCountry)
+    TextView mTvCountry;
     @BindView(R.id.etPhoneNumber)
     EditText mEtPhoneNumber;
     @BindView(R.id.etPassword)
@@ -66,15 +68,24 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         mPresenter = new RegisterPresenter(this);
     }
 
-    @OnClick({R.id.ivPhoto, R.id.btnRegister})
+    @OnClick({R.id.iv_back, R.id.ivPhoto,
+            R.id.btnRegister, R.id.tvCountry})
     public void onClick(View view) {
+        Intent intent = null;
         switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
             case R.id.ivPhoto:
-                Intent intent = new Intent(this, ImageGridActivity.class);
+                intent = new Intent(this, ImageGridActivity.class);
                 startActivityForResult(intent, IMAGE_PICKER);
                 break;
             case R.id.btnRegister:
                 mPresenter.checkRegisterInfo();
+                break;
+            case R.id.tvCountry:
+                intent = new Intent(this, CountryCodeActivity.class);
+                startActivityForResult(intent, COUNTRYCODE_BACK);
                 break;
         }
     }
@@ -99,18 +110,24 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
      */
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if (resultCode != ImagePicker.RESULT_CODE_ITEMS || data == null) {
-            return;
-        }
-        ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+        if (resultCode == ImagePicker.RESULT_CODE_ITEMS && data != null) {
 
-        headPhoto = images.get(0).path;
-        if (!TextUtils.isEmpty(headPhoto)) {
-            Glide.with(this)
-                    .load(headPhoto)
-                    .placeholder(R.color.voice_login)
-                    .error(R.color.voice_login)
-                    .into(mIvPhoto);
+            ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+
+            headPhoto = images.get(0).path;
+            if (!TextUtils.isEmpty(headPhoto)) {
+                Glide.with(this)
+                        .load(headPhoto)
+                        .placeholder(R.color.voice_login)
+                        .error(R.color.voice_login)
+                        .into(mIvPhoto);
+            }
+        }
+        else if(resultCode == RESULT_OK){
+            if(requestCode == COUNTRYCODE_BACK){
+                String countryCode = data.getStringExtra("countryCode");
+                mTvCountry.setText(countryCode);
+            }
         }
     }
 
@@ -131,7 +148,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public String getCounty() {
-        return mEtCountry.getText().toString();
+        return mTvCountry.getText().toString();
     }
 
     @Override
@@ -144,10 +161,5 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         Intent intent = new Intent(this, VerCodeActivity.class);
         intent.putExtra("bean", bean);
         startActivity(intent);
-    }
-
-    @OnClick(R.id.iv_back)
-    public void onClick() {
-        finish();
     }
 }

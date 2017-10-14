@@ -27,6 +27,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".ui.activity.RegisterActivity"/>
         <activity android:name=".ui.activity.MainActivity"/>
         <activity android:name=".ui.activity.VerCodeActivity"/>
@@ -35,12 +36,12 @@
         <activity android:name=".ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.FirstLoginActivity">
-        </activity>
+        <activity android:name=".ui.activity.FirstLoginActivity"/>
+        <activity android:name=".ui.activity.CountryCodeActivity"/>
+
     </application>
 
 </manifest>

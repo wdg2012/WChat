@@ -11,5 +11,9 @@
     <color name="color_green2">#8FE1A0</color>
     <color name="color_blue">#6F7FA4</color>
     <color name="color_gray">#eeeeee</color>
+    <color name="color_drak_gray">#aaaaaa</color>
+    <color name="font_gray_1">#A2A2A2</color>
+    <color name="font_gray_2">#545454</color>
+    <color name="font_gray_3">#F2F2F2</color>
 
 </resources>
