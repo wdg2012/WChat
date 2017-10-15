@@ -17,7 +17,7 @@ import rx.Observable;
 public interface CountryCodeContract {
 
     interface Model extends BaseContract.Model{
-        String getConutryCodeJson(Context context);
+        String getConutryCodeJson(Context context, String filePath);
         List<CountryCodeDto> getCountryCodes(String json);
         CountryCodeBean getCountryCodeBean(List<CountryCodeDto> data);
     }
@@ -27,6 +27,6 @@ public interface CountryCodeContract {
     }
 
     interface Presenter extends BaseContract.Presenter{
-        void getCountryCodes(Activity context);
+        void getCountryCodes(String filePath);
     }
 }

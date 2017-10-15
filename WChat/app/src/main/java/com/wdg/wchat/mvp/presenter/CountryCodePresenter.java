@@ -3,6 +3,7 @@ package com.wdg.wchat.mvp.presenter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.wdg.wchat.base.MyAPP;
 import com.wdg.wchat.bean.bean.CountryCodeBean;
@@ -36,16 +37,16 @@ public class CountryCodePresenter implements CountryCodeContract.Presenter {
     }
 
     @Override
-    public void getCountryCodes(final Activity context) {
-        if(context != null) {
+    public void getCountryCodes(String filePath) {
+        if(!TextUtils.isEmpty(filePath)) {
             final Dialog dialog = mView.showProgress();
-            Observable.just("getCountryCodes")
+            Observable.just(filePath)
                     .subscribeOn(Schedulers.io())
                     .map(new Func1<String, String>() {
 
                         @Override
-                        public String call(String str) {
-                            return mModel.getConutryCodeJson(context);
+                        public String call(String path) {
+                            return mModel.getConutryCodeJson(mContext, path);
                         }
                     })
                     .map(new Func1<String, List<CountryCodeDto>>() {

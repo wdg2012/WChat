@@ -16,9 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import rx.Observable;
-import rx.functions.Func1;
-
 /**
  * Created by ${wdgan} on 2017/9/28 0028.
  * 邮箱18149542718@163
@@ -26,13 +23,13 @@ import rx.functions.Func1;
 public class CountryCodeModel implements CountryCodeContract.Model {
 
     @Override
-    public String getConutryCodeJson(Context context) {
+    public String getConutryCodeJson(Context context, String filePath) {
         String result = null;
         InputStream in = null;
-        ByteArrayOutputStream out =null;
+        ByteArrayOutputStream out = null;
 
         try {
-            in = context.getClass().getClassLoader().getResourceAsStream("assets/country_code.json");
+            in = context.getClass().getClassLoader().getResourceAsStream(filePath);
             out = new ByteArrayOutputStream();
             if(in != null) {
                 int len = -1;
@@ -71,7 +68,7 @@ public class CountryCodeModel implements CountryCodeContract.Model {
     @Override
     public CountryCodeBean getCountryCodeBean(List<CountryCodeDto> data) {
         CountryCodeBean countryCodeBean = null;
-        if(data != null){
+        if(data != null && data.size() > 0){
             countryCodeBean = new CountryCodeBean();
             countryCodeBean.setCountryCodeDtoList(data);
             countryCodeBean.setLetterIndexMap(new HashMap<String, Integer>());

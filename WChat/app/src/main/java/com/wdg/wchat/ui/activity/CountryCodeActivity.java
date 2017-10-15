@@ -77,7 +77,7 @@ public class CountryCodeActivity extends BaseActivity
         letterView.setLetterToast(R.layout.letter_toast);
         letterView.setOnTouchLetterChangedListener(this);
         presenter = new CountryCodePresenter(this);
-        presenter.getCountryCodes(this);
+        presenter.getCountryCodes("assets/country_code.json");
     }
 
     @OnClick({R.id.layBack, R.id.ivRightBtn})
