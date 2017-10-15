@@ -5,13 +5,19 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.wdg.wchat.bean.bean.CountryCodeBean;
 import com.wdg.wchat.bean.dto.CountryCodeDto;
 import com.wdg.wchat.mvp.contract.CountryCodeContract;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by ${wdgan} on 2017/9/28 0028.
@@ -61,4 +67,25 @@ public class CountryCodeModel implements CountryCodeContract.Model {
         }
         return data;
     }
+
+    @Override
+    public CountryCodeBean getCountryCodeBean(List<CountryCodeDto> data) {
+        CountryCodeBean countryCodeBean = null;
+        if(data != null){
+            countryCodeBean = new CountryCodeBean();
+            countryCodeBean.setCountryCodeDtoList(data);
+            countryCodeBean.setLetterIndexMap(new HashMap<String, Integer>());
+            Map<String, Integer> letterIndexMap = countryCodeBean.getLetterIndexMap();
+            int index = 0;
+            //循环
+            for(CountryCodeDto codeDto : data){
+                if(codeDto.isCountry_group()){
+                    letterIndexMap.put(codeDto.getCountry_group_name(), index);
+                }
+                index++;
+            }
+        }
+        return countryCodeBean;
+    }
+
 }

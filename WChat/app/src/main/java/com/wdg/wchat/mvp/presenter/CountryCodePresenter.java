@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 
 import com.wdg.wchat.base.MyAPP;
+import com.wdg.wchat.bean.bean.CountryCodeBean;
 import com.wdg.wchat.bean.bean.NetSubscriber;
 import com.wdg.wchat.bean.dto.CountryCodeDto;
 import com.wdg.wchat.mvp.contract.CountryCodeContract;
@@ -37,7 +38,7 @@ public class CountryCodePresenter implements CountryCodeContract.Presenter {
     @Override
     public void getCountryCodes(final Activity context) {
         if(context != null) {
-            final Dialog dialog = ProgressDialogUtil.show(context);
+            final Dialog dialog = mView.showProgress();
             Observable.just("getCountryCodes")
                     .subscribeOn(Schedulers.io())
                     .map(new Func1<String, String>() {
@@ -54,8 +55,15 @@ public class CountryCodePresenter implements CountryCodeContract.Presenter {
                             return mModel.getCountryCodes(json);
                         }
                     })
+                    .map(new Func1<List<CountryCodeDto>, CountryCodeBean>() {
+
+                        @Override
+                        public CountryCodeBean call(List<CountryCodeDto> countryCodeDtos) {
+                            return mModel.getCountryCodeBean(countryCodeDtos);
+                        }
+                    })
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new NetSubscriber<List<CountryCodeDto>>(){
+                    .subscribe(new NetSubscriber<CountryCodeBean>(){
 
                         @Override
                         public void onCompleted() {
@@ -69,10 +77,10 @@ public class CountryCodePresenter implements CountryCodeContract.Presenter {
                         }
 
                         @Override
-                        public void onNext(List<CountryCodeDto> countryCodeDtos) {
-                            super.onNext(countryCodeDtos);
+                        public void onNext(CountryCodeBean countryCodeBean) {
+                            super.onNext(countryCodeBean);
                             dialog.dismiss();
-                            mView.updateCountryCodes(countryCodeDtos);
+                            mView.updateCountryCodes(countryCodeBean);
                         }
 
                     });

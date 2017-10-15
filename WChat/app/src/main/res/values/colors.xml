@@ -15,5 +15,7 @@
     <color name="font_gray_1">#A2A2A2</color>
     <color name="font_gray_2">#545454</color>
     <color name="font_gray_3">#F2F2F2</color>
+    <color name="color_black_t1">#55000000</color>
+    <color name="color_black_t2">#33000000</color>
 
 </resources>
