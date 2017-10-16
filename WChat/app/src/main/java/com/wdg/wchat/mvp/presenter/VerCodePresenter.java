@@ -1,11 +1,13 @@
 package com.wdg.wchat.mvp.presenter;
 
+import android.app.ProgressDialog;
 import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wdg.wchat.apiService.CommonApiService;
+import com.wdg.wchat.apiService.UserApiService;
 import com.wdg.wchat.base.MyAPP;
 import com.wdg.wchat.bean.bean.NetSubscriber;
 import com.wdg.wchat.bean.dto.RegisterDto;
@@ -63,6 +65,7 @@ public class VerCodePresenter implements VerCodeContract.Presenter {
             return;
         }
         String path = bean.getHeadPhoto();
+     final   ProgressDialog pd =  mView.showProgressDialog();
         Observable.just(path).subscribeOn(Schedulers.io()).map(new Func1<String, File>() {
             @Override
             public File call(final String s) {
@@ -82,28 +85,28 @@ public class VerCodePresenter implements VerCodeContract.Presenter {
                 MultipartBody.Part headPhoto = RetrofitUtils.makeMulPart(file, "smfile");
                 return service.uploadImage("https://sm.ms/api/upload", headPhoto);
             }
-        }).observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<UploadImageDto, Observable<RegisterDto>>() {
-                    @Override
-                    public Observable<RegisterDto> call(final UploadImageDto dto) {
-                        bean.setDelete_path(dto.getData().getDelete());
-                        bean.setHeadPhoto(dto.getData().getUrl());
-                        return mModel.register(bean);
-                    }
-                }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new NetSubscriber<RegisterDto>() {
-                    @Override
-                    public void onNext(final RegisterDto dto) {
-                        super.onNext(dto);
-                    }
+        }).flatMap(new Func1<UploadImageDto, Observable<RegisterDto>>() {
+            @Override
+            public Observable<RegisterDto> call(UploadImageDto uploadImageDto) {
+                bean.setDelete_path(uploadImageDto.getData().getDelete());
+                bean.setHead_path(uploadImageDto.getData().getUrl());
+                return mModel.register(bean);
+            }
+        }).observeOn(AndroidSchedulers.mainThread()).subscribe(new NetSubscriber<RegisterDto>() {
+            @Override
+            public void onNext(RegisterDto registerDto) {
+                super.onNext(registerDto);
+                if (registerDto.getCode().equals("101")){
+                    mView.registerSuccess();
+                }
+                Toast.makeText(mContext,registerDto.getError(),Toast.LENGTH_SHORT).show();;
+            }
 
-                    @Override
-                    public void onError(final Throwable e) {
-                        super.onError(e);
-                    }
-                });
-
+            @Override
+            public void onCompleted() {
+                pd.cancel();
+            }
+        });
     }
 
     /**
@@ -138,7 +141,7 @@ public class VerCodePresenter implements VerCodeContract.Presenter {
                     }
                 });
         isNoGetSms = true;
-//        cn.smssdk.SMSSDK.getVerificationCode(zone, phone);
+        cn.smssdk.SMSSDK.getVerificationCode(zone, phone);
     }
 
     /**
