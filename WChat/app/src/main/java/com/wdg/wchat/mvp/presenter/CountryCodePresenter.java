@@ -21,6 +21,7 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
+ * 国家地区 Presenter
  * Created by ${wdgan} on 2017/9/28 0028.
  * 邮箱18149542718@163
  */
