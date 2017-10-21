@@ -58,7 +58,7 @@ public class LetterView extends View {
         paint.setDither(true);
         paint.setFakeBoldText(true);
         //paint.setTypeface(Typeface.DEFAULT_BOLD);
-        paint.setTextSize(30);
+        paint.setTextSize(getResources().getDimension(R.dimen.letter_size));
         paint.setColor(getResources().getColor(R.color.font_gray_2));
     }
 
