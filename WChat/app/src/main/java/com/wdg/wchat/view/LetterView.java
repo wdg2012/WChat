@@ -81,16 +81,19 @@ public class LetterView extends View {
             canvas.drawColor(getResources().getColor(R.color.color_black_t2));
         }
 
-        int height = getHeight();
         int width = getWidth();
-        int singleHeight = height / letters.length;
+        int height = getHeight();
+        Paint.FontMetrics fm = paint.getFontMetrics();
+        float fontHeight = fm.descent - fm.ascent;
+        float cellHeight = height * 1.0f / letters.length;
+        float offsetY = (cellHeight + fontHeight) * 0.5f + fm.ascent;
 
         for (int i = 0; i < letters.length; i++) {
 /*            paint.setColor(i == choose ?
                     getResources().getColor(R.color.font_gray_1)
                     : getResources().getColor(R.color.font_gray_1));*/
-            float xPos = width / 2 - paint.measureText(letters[i]) / 2;
-            float yPos = singleHeight * i + singleHeight;
+            float xPos = (width - paint.measureText(letters[i])) * 0.5f ;
+            float yPos = cellHeight * (i + 1) - offsetY;
             canvas.drawText(letters[i], xPos, yPos, paint);
         }
     }
