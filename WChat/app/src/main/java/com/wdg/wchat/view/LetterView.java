@@ -150,12 +150,11 @@ public class LetterView extends View {
     }
 
     public void delayCloseToast(){
-        if(subscription != null && !subscription.isUnsubscribed()){
-            //Log.d(TAG, "unsubscribe");
+        if(subscription != null
+                && !subscription.isUnsubscribed()){
             subscription.unsubscribe();
         }
-        subscription = Observable.interval(500, TimeUnit.MILLISECONDS)
-                .take(1)
+        subscription = Observable.timer(500, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new NetSubscriber<Long>(){
@@ -163,6 +162,9 @@ public class LetterView extends View {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
+                        if(letterToast != null){
+                            letterToast.setVisibility(View.INVISIBLE);
+                        }
                     }
 
                     @Override
@@ -173,9 +175,6 @@ public class LetterView extends View {
                     @Override
                     public void onNext(Long aLong) {
                         super.onNext(aLong);
-                        if(letterToast != null){
-                            letterToast.setVisibility(View.INVISIBLE);
-                        }
                     }
 
                 });

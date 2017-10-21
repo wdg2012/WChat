@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.FirstLoginActivity"/>
-        <activity android:name=".ui.activity.CountryCodeActivity"/>
+        <activity android:name=".ui.activity.CountryCodeActivity" android:windowSoftInputMode="adjustPan"/>
 
     </application>
 

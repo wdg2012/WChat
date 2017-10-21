@@ -13,16 +13,12 @@
 
         <ImageView
             android:id="@+id/ivBackBtn"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/tool_bar_margin_left"
-            android:src="@drawable/back_01" />
-
-        <View
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_centerVertical="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_back" />
 
         <View
             android:layout_width="0.001dp"
@@ -31,21 +27,24 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/ivRightBtn"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:visibility="invisible"/>
+
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/ivRightBtn"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/layBack"
+        android:gravity="center_vertical"
         android:text=""
         android:textColor="@color/color_white"
         android:textSize="16sp" />
-
-    <ImageView
-        android:id="@+id/ivRightBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" />
 
 </RelativeLayout>

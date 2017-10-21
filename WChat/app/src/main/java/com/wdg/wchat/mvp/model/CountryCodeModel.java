@@ -12,6 +12,7 @@ import com.wdg.wchat.mvp.contract.CountryCodeContract;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,44 @@ public class CountryCodeModel implements CountryCodeContract.Model {
                     letterIndexMap.put(codeDto.getCountry_group_name(), index);
                 }
                 index++;
+            }
+        }
+        return countryCodeBean;
+    }
+
+    @Override
+    public CountryCodeBean searchCountryCodes(String key, CountryCodeBean codeBean) {
+        CountryCodeBean countryCodeBean = null;
+        if(!TextUtils.isEmpty(key)
+                && codeBean != null
+                && codeBean.getCountryCodeDtoList() != null){
+            countryCodeBean = new CountryCodeBean();
+            countryCodeBean.setCountryCodeDtoList(new ArrayList<CountryCodeDto>());
+            countryCodeBean.setLetterIndexMap(new HashMap<String, Integer>());
+            final String _TPF = ".*" + key + ".*";
+            final List<CountryCodeDto> searchCodeDtos = codeBean.getCountryCodeDtoList();
+            final List<CountryCodeDto> countryCodeDtos = countryCodeBean.getCountryCodeDtoList();
+            final Map<String, Integer> letterIndexMap = countryCodeBean.getLetterIndexMap();
+            String groupName = "";
+            int index = 0;
+            //循环
+            for(CountryCodeDto codeDto : searchCodeDtos){
+                if(codeDto.getCountry_name_cn().matches(_TPF)){
+                    if(!groupName.equals(codeDto.getCountry_group_name())){
+                        //添加组
+                        groupName = codeDto.getCountry_group_name();
+                        CountryCodeDto gCodeDto = new CountryCodeDto();
+                        gCodeDto.setCountry_id(-1);
+                        gCodeDto.setCountry_group(true);
+                        gCodeDto.setCountry_group_name(groupName);
+                        countryCodeDtos.add(gCodeDto);
+                        letterIndexMap.put(groupName, index);
+                        index++;
+                    }
+                    //添加国家代码
+                    countryCodeDtos.add(codeDto);
+                    index++;
+                }
             }
         }
         return countryCodeBean;
